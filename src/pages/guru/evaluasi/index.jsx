@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { ChevronRight, Calculator, BookOpen, ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronRight, Calculator, BookOpen } from 'lucide-react';
 
 // --- DUMMY DATA ---
 const chartData = [
@@ -28,41 +28,27 @@ const chartData = [
   { name: 'Dec', value: 75 },
 ];
 
-const studentsData = [
+const studentsEvalData = [
   {
     id: 1,
     name: 'Fanan Agfian Mozart',
     chapter: 'Bab 1 - Aljabar I',
-    score: 98.56,
+    score: 45,
     img: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Fanan',
   },
   {
     id: 2,
-    name: 'Michale Kevin Sanjaya',
-    chapter: 'Bab 1 - Aljabar I',
-    score: 97.83,
-    img: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kevin',
-  },
-  {
-    id: 3,
     name: 'Richard Santoso',
     chapter: 'Bab 1 - Aljabar I',
-    score: 94.22,
+    score: 32,
     img: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Richard',
   },
   {
-    id: 4,
-    name: 'Dian Sastro',
+    id: 3,
+    name: 'Clara Puspita Sari',
     chapter: 'Bab 1 - Aljabar I',
-    score: 91.0,
-    img: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dian',
-  },
-  {
-    id: 5,
-    name: 'Budi Doremi',
-    chapter: 'Bab 1 - Aljabar I',
-    score: 89.5,
-    img: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Budi',
+    score: 25,
+    img: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Clara',
   },
 ];
 
@@ -72,44 +58,28 @@ const tasksData = [
   { id: 3, title: 'Matematika Wajib Pos Test', date: '16 November 2022' },
 ];
 
-const classOptions = ['XII - IPA 5', 'XII - IPA 6', 'XI - IPS 1'];
-const subjectOptions = ['Matematika', 'Fisika', 'Kimia'];
-
-export default function DashboardGuru() {
-  // State untuk Filter Table
-  const [selectedClass, setSelectedClass] = useState('XII - IPA 5');
-  const [selectedSubject, setSelectedSubject] = useState('Matematika');
+export default function EvaluasiGuru() {
+  const [selectedClassChart, setSelectedClassChart] =
+    useState('MTK - XII IPA 5');
+  const [selectedClassTable, setSelectedClassTable] = useState('XII - IPA 5');
+  const [selectedMateri, setSelectedMateri] = useState('Matematika');
 
   return (
     <DashboardLayout role='guru'>
       <Head>
-        <title>Dashboard Guru - Pandai</title>
+        <title>Evaluasi - Pandai</title>
       </Head>
 
-      <div className='flex flex-col gap-8 max-w-[1400px]'>
+      <div className='flex flex-col gap-6 max-w-[1400px]'>
         {/* Header Title */}
-        <h1 className='text-2xl font-bold text-slate-800'>Dashboard Guru</h1>
+        <h1 className='text-2xl font-bold text-slate-800'>
+          Dashboard Guru / Evaluasi
+        </h1>
 
         <div className='grid grid-cols-12 gap-8'>
-          {/* LEFT COLUMN (Wide) */}
+          {/* LEFT COLUMN */}
           <div className='col-span-12 lg:col-span-8 flex flex-col gap-6'>
-            {/* 1. Banner Section */}
-            <div className='relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#5856D6] to-[#8E8CFF] text-white p-8 shadow-lg shadow-indigo-200'>
-              <div className='absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none'></div>
-
-              <div className='relative z-10'>
-                <div className='inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-medium mb-4 border border-white/10'>
-                  22 November 2025
-                </div>
-                <h2 className='text-3xl font-bold mb-2'>Halo Pak Budi!</h2>
-                <p className='text-indigo-100 max-w-lg text-sm leading-relaxed opacity-90'>
-                  LMS adalah tempat untuk guru melihat progress siswa dan
-                  mendapatkan evaluasi pembelajaran
-                </p>
-              </div>
-            </div>
-
-            {/* 2. Evaluasi & Sentimen Section */}
+            {/* 1. Evaluasi & Sentimen Section */}
             <div>
               <h3 className='text-lg font-bold text-slate-800 mb-4'>
                 Evaluasi & Sentimen
@@ -122,12 +92,11 @@ export default function DashboardGuru() {
                       Rasio Pemahaman Siswa
                     </h4>
                     <div className='flex items-center gap-1 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full text-xs font-medium text-slate-600 cursor-pointer hover:bg-slate-100 transition'>
-                      <span>MTK - XII IPA 5</span>
+                      <span>{selectedClassChart}</span>
                       <ChevronDown size={14} />
                     </div>
                   </div>
 
-                  {/* Recharts Area */}
                   <div className='h-[200px] w-full text-xs'>
                     <ResponsiveContainer width='100%' height='100%'>
                       <LineChart data={chartData}>
@@ -150,7 +119,6 @@ export default function DashboardGuru() {
                             border: 'none',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                           }}
-                          cursor={{ stroke: '#e2e8f0', strokeWidth: 1 }}
                         />
                         <Line
                           type='monotone'
@@ -222,7 +190,7 @@ export default function DashboardGuru() {
               </div>
             </div>
 
-            {/* 3. Rangkuman Panduan Mengajar */}
+            {/* 2. Rangkuman Panduan Mengajar */}
             <div className='bg-[#F4F6FA] border border-indigo-100 rounded-xl p-5'>
               <h4 className='text-indigo-800 font-bold text-sm mb-1'>
                 Rangkuman panduan mengajar
@@ -234,77 +202,72 @@ export default function DashboardGuru() {
               </p>
             </div>
 
-            {/* 4. Daftar Nilai Siswa Table */}
-            <div>
-              {/* Table Header & Controls */}
-              <div className='flex flex-col md:flex-row md:items-center justify-between mb-5 gap-4'>
-                <h3 className='text-xl font-bold text-slate-800'>
-                  Daftar Nilai Siswa
-                </h3>
+            {/* 3. Siswa Yang Perlu Dievaluasi Table */}
+            <div className='bg-white rounded-2xl border border-gray-100 shadow-sm p-6'>
+              <div className='flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4'>
+                <h2 className='text-xl font-bold text-slate-800'>
+                  Siswa Yang Perlu Dievaluasi
+                </h2>
 
-                {/* Select / Dropdown Filters */}
                 <div className='flex gap-3'>
                   {/* Class Selector */}
                   <div className='relative group'>
                     <select
-                      value={selectedClass}
-                      onChange={(e) => setSelectedClass(e.target.value)}
-                      className='appearance-none bg-white border border-gray-200 text-slate-700 py-2 pl-4 pr-10 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 hover:border-gray-300 transition cursor-pointer'
+                      value={selectedClassTable}
+                      onChange={(e) => setSelectedClassTable(e.target.value)}
+                      className='appearance-none bg-slate-50 border border-gray-200 text-slate-600 py-1.5 pl-4 pr-10 rounded-full text-xs font-bold cursor-pointer hover:border-gray-300 transition focus:outline-none'
                     >
-                      {classOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
+                      <option>XII - IPA 5</option>
+                      <option>XII - IPA 6</option>
                     </select>
                     <div className='absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400'>
-                      <ChevronDown size={16} />
+                      <ChevronDown size={14} />
                     </div>
                   </div>
 
                   {/* Subject Selector */}
                   <div className='relative group'>
                     <select
-                      value={selectedSubject}
-                      onChange={(e) => setSelectedSubject(e.target.value)}
-                      className='appearance-none bg-white border border-gray-200 text-slate-700 py-2 pl-4 pr-10 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 hover:border-gray-300 transition cursor-pointer'
+                      value={selectedMateri}
+                      onChange={(e) => setSelectedMateri(e.target.value)}
+                      className='appearance-none bg-slate-50 border border-gray-200 text-slate-600 py-1.5 pl-4 pr-10 rounded-full text-xs font-bold cursor-pointer hover:border-gray-300 transition focus:outline-none'
                     >
-                      {subjectOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
+                      <option>Matematika</option>
+                      <option>Fisika</option>
                     </select>
                     <div className='absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400'>
-                      <ChevronDown size={16} />
+                      <ChevronDown size={14} />
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Table Component */}
-              <div className='bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm'>
+              {/* Table */}
+              <div className='overflow-hidden rounded-xl border border-blue-50'>
                 <table className='w-full text-left border-collapse'>
                   <thead>
-                    <tr className='bg-slate-50/50 border-b border-gray-100 text-slate-500 text-sm'>
-                      <th className='py-4 px-6 font-semibold'>Nama</th>
-                      <th className='py-4 px-6 font-semibold'>Materi</th>
-                      <th className='py-4 px-6 font-semibold text-right'>
+                    <tr className='bg-blue-50/50 border-b border-blue-100 text-slate-600 text-sm'>
+                      <th className='py-3 px-6 font-bold w-12'>No</th>
+                      <th className='py-3 px-6 font-bold'>Nama</th>
+                      <th className='py-3 px-6 font-bold'>Materi</th>
+                      <th className='py-3 px-6 font-bold text-right'>
                         Scor Quiz
                       </th>
                     </tr>
                   </thead>
                   <tbody className='divide-y divide-gray-50'>
-                    {studentsData.map((student, idx) => (
+                    {studentsEvalData.map((student, idx) => (
                       <tr
                         key={student.id}
                         className='hover:bg-slate-50 transition-colors group'
                       >
-                        <td className='py-4 px-6'>
+                        <td className='py-3 px-6'>
+                          <span className='text-blue-600 font-bold text-sm'>
+                            {idx + 1}
+                          </span>
+                        </td>
+                        <td className='py-3 px-6'>
                           <div className='flex items-center gap-3'>
-                            <span className='text-indigo-600 font-bold text-sm w-4'>
-                              {idx + 1}
-                            </span>
                             <div className='w-8 h-8 rounded-full bg-gray-200 overflow-hidden border border-gray-100'>
                               <img
                                 src={student.img}
@@ -312,21 +275,19 @@ export default function DashboardGuru() {
                                 className='w-full h-full object-cover'
                               />
                             </div>
-                            <span className='font-bold text-slate-700 text-sm group-hover:text-indigo-600 transition-colors'>
+                            <span className='font-bold text-slate-700 text-sm group-hover:text-blue-600 transition-colors'>
                               {student.name}
                             </span>
                           </div>
                         </td>
-                        <td className='py-4 px-6'>
-                          <span className='text-indigo-700 font-bold text-sm bg-indigo-50 px-3 py-1 rounded-lg'>
+                        <td className='py-3 px-6'>
+                          <span className='text-indigo-900 font-bold text-sm'>
                             {student.chapter}
                           </span>
                         </td>
-                        <td className='py-4 px-6 text-right'>
-                          <div className='inline-block bg-gray-100 text-slate-600 px-3 py-1 rounded-lg text-sm font-bold'>
-                            {student.score.toLocaleString('id-ID', {
-                              minimumFractionDigits: 2,
-                            })}
+                        <td className='py-3 px-6 text-right'>
+                          <div className='inline-flex justify-center items-center w-8 h-8 rounded-full bg-gray-100 text-slate-500 font-bold text-sm'>
+                            {student.score}
                           </div>
                         </td>
                       </tr>
@@ -339,13 +300,12 @@ export default function DashboardGuru() {
 
           {/* RIGHT COLUMN (Sidebar Widgets) */}
           <div className='col-span-12 lg:col-span-4 flex flex-col gap-8'>
-            {/* 1. Mata Pelajaran Diampu */}
+            {/* Widget 1: Mata Pelajaran */}
             <div>
               <h3 className='text-lg font-bold text-slate-800 mb-4'>
                 Mata Pelajaran Diampu
               </h3>
               <div className='grid grid-cols-2 gap-4'>
-                {/* Card 1 */}
                 <div className='bg-white rounded-2xl p-6 flex flex-col items-center justify-center gap-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer hover:border-indigo-100 group'>
                   <div className='w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform'>
                     <Calculator size={24} />
@@ -354,7 +314,6 @@ export default function DashboardGuru() {
                     Matematika Wajib
                   </span>
                 </div>
-                {/* Card 2 */}
                 <div className='bg-white rounded-2xl p-6 flex flex-col items-center justify-center gap-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer hover:border-indigo-100 group'>
                   <div className='w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform'>
                     <BookOpen size={24} />
@@ -363,7 +322,6 @@ export default function DashboardGuru() {
                     Fisika
                   </span>
                 </div>
-                {/* Card 3 (Big) */}
                 <div className='bg-white rounded-2xl p-6 flex flex-col items-center justify-center gap-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer hover:border-indigo-100 group col-span-1'>
                   <div className='w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform'>
                     <Calculator size={24} />
@@ -375,7 +333,7 @@ export default function DashboardGuru() {
               </div>
             </div>
 
-            {/* 2. Tugas Perlu Dikoreksi */}
+            {/* Widget 2: Tugas */}
             <div>
               <h3 className='text-lg font-bold text-slate-800 mb-4'>
                 Tugas Perlu Dikoreksi

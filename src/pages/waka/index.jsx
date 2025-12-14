@@ -1,112 +1,119 @@
-import React from 'react';
-import DashboardLayout from '@/components/layouts/DashboardLayout';
-import { Users, Calendar, Search } from 'lucide-react';
+import Head from 'next/head';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import { Users, Calendar, MoreHorizontal } from 'lucide-react'; // Menggunakan Lucide (Shadcn standard)
 
-export default function WakaDashboard() {
-  // Data Dummy untuk Guru (Diulang sesuai gambar)
-  const teachers = Array(6).fill({
-    name: 'Pak Budi',
+// --- MOCK DATA ---
+const stats = [
+  { label: 'Total Guru', value: '45', icon: Users },
+  { label: 'Total Kelas', value: '120', icon: Calendar },
+];
+
+const teachers = [
+  // Saya duplikasi data agar terlihat banyak seperti di desain (Grid)
+  ...Array(7).fill({
+    name: 'Budi Gunawan',
     nip: '12345678',
-    avatar:
-      'https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?w=740', // Placeholder 3D
-    subjects: ['Mat Wajib XII', 'Fisika X', 'Mat Minat XI'],
-  });
+    mapel: 'Matematika Wajib XII',
+    kelas: 'IPA XII',
+    waliKelas: 'Walikelas XII MIPA 6',
+    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Budi', // Placeholder
+    bgGradient: false,
+  }),
+];
 
+// --- REUSABLE COMPONENTS (Mini Shadcn-like Components) ---
+
+// 1. Component Card Sederhana
+const StatCard = ({ label, value, icon: Icon }) => (
+  <div className='bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between'>
+    <div>
+      <h3 className='text-slate-500 font-medium text-lg mb-2'>{label}</h3>
+      <p className='text-4xl font-bold text-slate-800'>{value}</p>
+    </div>
+    <div className='w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-800'>
+      <Icon size={32} strokeWidth={2} />
+    </div>
+  </div>
+);
+
+// 2. Component Teacher Card (Kartu Guru)
+const TeacherCard = ({ teacher }) => (
+  <div className='bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-4 group'>
+    {/* Profile Header */}
+    <div className='flex flex-col gap-3'>
+      <div className='w-16 h-16 rounded-full bg-pink-100 overflow-hidden mx-auto md:mx-0'>
+        <img
+          src={teacher.image}
+          alt={teacher.name}
+          className='w-full h-full object-cover'
+        />
+      </div>
+      <div>
+        <h4 className='font-bold text-lg text-slate-800'>{teacher.name}</h4>
+        <p className='text-xs text-slate-500 font-medium'>NIP: {teacher.nip}</p>
+      </div>
+    </div>
+
+    {/* Info Block */}
+    <div className='space-y-3'>
+      {/* Mapel */}
+      <div>
+        <p className='text-[10px] uppercase font-bold text-slate-400 mb-1'>
+          Mapel Diampu
+        </p>
+        <div className='flex flex-wrap gap-2'>
+          <span className='inline-block px-3 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs font-semibold text-slate-600'>
+            {teacher.mapel}
+          </span>
+          <span className='inline-block px-3 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs font-semibold text-slate-600'>
+            {teacher.kelas}
+          </span>
+        </div>
+      </div>
+
+      {/* Wali Kelas */}
+      <div>
+        <p className='text-[10px] uppercase font-bold text-slate-400 mb-1'>
+          Wali kelas
+        </p>
+        <span className='inline-block px-3 py-1 bg-blue-50 border border-blue-100 rounded-lg text-xs font-semibold text-blue-600'>
+          {teacher.waliKelas}
+        </span>
+      </div>
+    </div>
+  </div>
+);
+
+// --- MAIN PAGE ---
+
+export default function DashboardWaka() {
   return (
     <DashboardLayout role='waka'>
-      <div className='space-y-8'>
-        {/* === Header === */}
-        <div>
-          <h1 className='text-2xl font-bold text-gray-900'>Dashboard WAKA</h1>
-        </div>
+      <Head>
+        <title>Dashboard Waka - Pandai</title>
+      </Head>
 
-        {/* === Stats Cards === */}
+      <div className='flex flex-col gap-8 max-w-[1400px]'>
+        {/* Header Title */}
+        <h1 className='text-2xl font-bold text-slate-800'>Dashboard WAKA</h1>
+
+        {/* 1. Stats Section */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-          {/* Card Total Guru */}
-          <div className='bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center justify-between'>
-            <div>
-              <p className='text-gray-500 font-medium text-lg mb-1'>
-                Total Guru
-              </p>
-              <h2 className='text-4xl font-bold text-gray-900'>45</h2>
-            </div>
-            <div className='w-16 h-16 flex items-center justify-center'>
-              <Users size={48} className='text-gray-900' />
-            </div>
-          </div>
-
-          {/* Card Total Kelas */}
-          <div className='bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center justify-between'>
-            <div>
-              <p className='text-gray-500 font-medium text-lg mb-1'>
-                Total Kelas
-              </p>
-              <h2 className='text-4xl font-bold text-gray-900'>120</h2>
-            </div>
-            <div className='w-16 h-16 flex items-center justify-center'>
-              <Calendar size={48} className='text-gray-900' />
-            </div>
-          </div>
+          {stats.map((stat, idx) => (
+            <StatCard key={idx} {...stat} />
+          ))}
         </div>
 
-        {/* === Daftar Guru Section === */}
+        {/* 2. Daftar Guru Section */}
         <div>
-          <div className='flex items-center justify-between mb-6'>
-            <h2 className='text-xl font-bold text-gray-900'>
-              Daftar Guru & Kelas
-            </h2>
-            {/* Optional: Search Bar (Bonus UI) */}
-            {/* <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18}/>
-                <input type="text" placeholder="Cari guru..." className="pl-10 pr-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-             </div> */}
-          </div>
+          <h2 className='text-lg font-bold text-slate-800 mb-6'>
+            Daftar Sekilas Guru
+          </h2>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
-            {teachers.map((teacher, index) => (
-              <div
-                key={index}
-                className='bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center'
-              >
-                {/* Avatar Circle */}
-                <div className='w-24 h-24 rounded-full bg-[#A5F3FC] mb-4 overflow-hidden border-4 border-white shadow-sm'>
-                  <img
-                    src={teacher.avatar}
-                    alt={teacher.name}
-                    className='w-full h-full object-cover object-top'
-                  />
-                </div>
-
-                {/* Info Guru */}
-                <h3 className='text-xl font-bold text-gray-900'>
-                  {teacher.name}
-                </h3>
-                <p className='text-sm text-gray-500 font-medium mb-4'>
-                  NIP: {teacher.nip}
-                </p>
-
-                {/* List Pelajaran (Tags) */}
-                <div className='w-full mb-6'>
-                  <p className='text-xs text-gray-400 font-semibold mb-2 text-left w-full'>
-                    Mengajar
-                  </p>
-                  <div className='flex flex-wrap gap-2 justify-center'>
-                    {teacher.subjects.map((sub, idx) => (
-                      <span
-                        key={idx}
-                        className='px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-xs font-bold'
-                      >
-                        {sub}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Action Button */}
-                <button className='w-full py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white font-semibold text-sm shadow-md hover:opacity-90 transition-opacity'>
-                  Daftar Kelas dan Siswa
-                </button>
-              </div>
+          {/* Grid Layout untuk Kartu Guru */}
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6'>
+            {teachers.map((t, i) => (
+              <TeacherCard key={i} teacher={t} />
             ))}
           </div>
         </div>
